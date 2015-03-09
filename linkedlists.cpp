@@ -340,7 +340,104 @@ node * reverse(node * head)
 	return temp; // dont return head or next as it might be NULL
 }
 
+// Recursively reverse
 
+node * recursivelyReverse(node * head)
+{
+	if (!head)
+		return NULL;
+	if (head->next == NULL)
+		return head;
+
+	node *secondNode = head->next;
+	head->next = NULL;
+	node *reversed = recursivelyReverse(secondNode);
+	secondNode->next = head;
+	return reversed;
+}
+
+// find the intersection of two list
+node * findIntersection(node *head1, node *head2)
+{
+	int l1 = 0, l2 = 0, diff = 0;
+	node *h1 = head1, *h2 = head2;
+	while (h1!= NULL)
+	{
+		l1++;
+		h1 = h1->next;
+	}
+	while (h2!= NULL)
+	{
+		l2++;
+		h2 = h2->next;
+	}
+	diff = abs(l1-l2);
+	h1 = head1;
+	h2 = head2;
+	if(l1>l2)
+		{
+			while(diff--)
+				h1 = h1->next;
+		}
+	else
+		{
+			while(diff--)
+				h2 = h2->next;
+		}
+	while(h1!=h2 && h1 != NULL && h2 != NULL)
+	{
+		h1 = h1->next;
+		h2 = h2->next;
+	}
+	cout << h1->data<< endl;
+	return h1;
+}
+
+// find the middle node
+// move 1 ptr at 2x speed of the other
+// make sure that position of 1st is x and other is 2x
+// thus assugn one as head(pos = 1) other as head->next(pos = 2)
+node * middleNode(node *head)
+{
+	node *s = head, *f = head->next;
+	while(f != NULL && f->next != NULL)
+	{
+		s = s->next;
+		f = f->next->next;
+	}
+	cout<<s->data<<endl;
+	return s;
+}
+
+// Print the linked list in reverse
+int reversePrint(node *head)
+{
+	node *temp;
+	if(head->next != NULL)
+		reversePrint(head->next);
+	cout<<head->data;
+	return 0;
+}
+
+// Reverse the linked list in pairs
+// 1 2 3 4 5 6 becoms 2 1 4 3 6 5 
+// does not work
+node * pairwiseReverse(node *head) 
+{
+	node *temp;
+	if(head == NULL || head->next == NULL)
+		return;
+	else
+	{//reverse first pair
+		temp = head->next;
+		head->next = temp->next;
+		temp->next = head;
+		head = temp;
+		// reverse the next pair recursively
+		head->next->next = pairwiseReverse(head->next->next);
+		return head;
+	}
+}
 
 /*=============================================================================
 LINKED LISTS PROBLEMS END
@@ -366,7 +463,23 @@ int main()
 	//cycleStart(cycLL);
 
 	//node *revLL = reverse(newLL);
-	
-	printLL(revLL);
+	//node *revLL = recursivelyReverse(newLL);
+	//printLL(revLL);
 
+
+	/* for intersection
+	node *newll2 = (node *)malloc(sizeof(node));
+	newll2->data = 1;
+	insert(&newll2, 2, 2);
+	insert(&newll2, 3, 3);
+	//printLL(newll2);
+	newll2->next->next->next = newLL->next->next;
+	printLL(newll2);
+	findIntersection(newLL, newll2);
+	*/
+
+	//middleNode(newLL);
+
+	pairwiseReverse(newLL);	
+	printLL(newLL);
 }
